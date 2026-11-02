@@ -1,0 +1,32 @@
+[
+  {
+    "name": "ComfyUI_SaveImageWithoutMetadata",
+    "url": "https://github.com/duldduld/ComfyUI_SaveImageWithoutMetadata",
+    "commit": "9ae0beb96d650058f12aa29b577105a6d945a6b9"
+  },
+  {
+    "name": "comfyui-krea2edit",
+    "url": "https://github.com/lbouaraba/comfyui-krea2edit",
+    "commit": "13ef60f20828949becada815d3cbc371eb5ccaab"
+  },
+  {
+    "name": "rgthree-comfy",
+    "url": "https://github.com/rgthree/rgthree-comfy",
+    "commit": "d7297b42f0fa78bec1c0411478f887423c249502"
+  },
+  {
+    "name": "ComfyUI-Lora-Manager",
+    "url": "https://github.com/willmiao/ComfyUI-Lora-Manager",
+    "commit": "9f71d524a413b1f18fdab939bb2c9ef57b946e12"
+  },
+  {
+    "name": "ComfyUI-Easy-Use",
+    "url": "https://github.com/yolain/ComfyUI-Easy-Use",
+    "commit": "271685698b0935c5b0ecca86a58c3817931cd205"
+  },
+  {
+    "name": "ComfyUI-GridSplit",
+    "url": "https://github.com/workordie/ComfyUI-GridSplit",
+    "commit": "323b34e20ddc3196f45fe4e7be93970fa77929a2"
+  }
+]

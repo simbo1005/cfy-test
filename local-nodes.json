@@ -1,0 +1,7 @@
+{
+  "node_id": "LocalPromptFormatter",
+    "files": {
+    "__init__.py": "04c1d7e6c77a49f921a207ee00321f1992b340e3ce66cc669b422ac5886576f2",
+    "web/prompt_formatter.js": "03c8bde22673ac8613c6cb806c382050d638fa1b72ccafe2aa4f949bab032d1e"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "diffusion_models": [
+    "https://huggingface.co/OWNER/REPOSITORY/resolve/main/your-model.safetensors"
+  ],
+  "loras": [
+    "https://huggingface.co/OWNER/REPOSITORY/resolve/main/your-lora.safetensors"
+  ]
+}

@@ -46,7 +46,7 @@ jobs:
           push: false
           tags: cfy:check
           labels: |
-            org.opencontainers.image.source=https://github.com/p355planes/cfy
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
 
       - name: Test actual image startup before publishing
         env:
@@ -55,7 +55,7 @@ jobs:
 
       - name: Publish tested image
         env:
-          IMAGE: ghcr.io/p355planes/cfy
+          IMAGE: ghcr.io/${{ github.repository }}
         run: |
           docker tag cfy:check "$IMAGE:$GITHUB_SHA"
           docker tag cfy:check "$IMAGE:latest"

@@ -91,6 +91,7 @@ class RuntimeTests(unittest.TestCase):
         seed = self.root / 'seed'
         seed.mkdir()
         (seed / 'main.py').write_text('import time\nprint("ENGINE_READY", flush=True)\nwhile True: time.sleep(1)\n')
+        (seed / 'server.py').write_text('def middleware():\n    if True:\n        if True:\n' + module('proxy_fix', 'apply_proxy_fix.py').OLD + '\n')
         subprocess.run(['git', 'init', '-q', str(seed)], check=True)
         subprocess.run(['git', '-C', str(seed), 'add', 'main.py'], check=True)
         subprocess.run(['git', '-C', str(seed), '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
@@ -112,6 +113,7 @@ class RuntimeTests(unittest.TestCase):
         if slow_downloads:
             template = self.root / 'template'
             template.mkdir()
+            (template / 'apply_proxy_fix.py').write_text((ROOT / 'apply_proxy_fix.py').read_text())
             (template / 'install_workflows.py').write_text((ROOT / 'install_workflows.py').read_text())
             (template / 'workflows').mkdir()
             (template / 'download_models.py').write_text('import time\nprint("SLOW_DOWNLOAD_RUNNING", flush=True)\ntime.sleep(30)\n')

@@ -15,7 +15,7 @@ jar = http.cookiejar.CookieJar()
 opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
 
 
-def request(port, path, method='GET', payload=None, proxy=False):
+def request(port, path, method='GET', payload=None, proxy=False, extra_headers=None):
     headers = {}
     if proxy:
         headers = {'Origin': ORIGIN, 'Host': '127.0.0.1:60940', 'X-Forwarded-Proto': 'https',
@@ -25,6 +25,7 @@ def request(port, path, method='GET', payload=None, proxy=False):
                 headers['X-XSRFToken'] = cookie.value
     if payload is not None:
         headers['Content-Type'] = 'application/json'
+    headers.update(extra_headers or {})
     req = urllib.request.Request(f'http://127.0.0.1:{port}{path}', method=method, headers=headers,
                                  data=json.dumps(payload).encode() if payload is not None else None)
     with opener.open(req, timeout=10) as response:
@@ -54,6 +55,23 @@ subprocess.run(['docker', 'run', '-d', '--name', NAME,
 try:
     wait_for(8888, '/lab', proxy=True)
     wait_for(8188, '/system_stats')
+    navigation = {'Sec-Fetch-Site': 'cross-site', 'Sec-Fetch-Mode': 'navigate',
+                  'Sec-Fetch-Dest': 'document', 'Referer': 'https://console.runpod.io/'}
+    for method in ('GET', 'HEAD'):
+        assert request(8188, '/', method, extra_headers=navigation)[0] == 200
+    # A link exemption must never permit cross-site API access or workflow submission.
+    for method, path, headers in (
+        ('POST', '/prompt', navigation),
+        ('GET', '/system_stats', navigation),
+        ('GET', '/', dict(navigation, **{'Sec-Fetch-Mode': 'cors'})),
+    ):
+        try:
+            request(8188, path, method, extra_headers=headers)
+        except urllib.error.HTTPError as exc:
+            assert exc.code == 403, (method, path, exc.code)
+        else:
+            raise AssertionError(f'Cross-site request unexpectedly allowed: {method} {path}')
+    print('PASS: dashboard homepage navigation and cross-site API protections.', flush=True)
     status, body = request(8188, '/object_info/LocalPromptFormatter')
     assert status == 200 and 'LocalPromptFormatter' in json.loads(body), 'Local formatter did not load'
     status, body = request(8888, '/api/terminals', 'POST', {}, proxy=True)

@@ -25,9 +25,10 @@ RUN python3 -m venv /opt/jupyter \
     && /opt/jupyter/bin/python -m ipykernel install --sys-prefix --name python3 --display-name "Python 3" \
     && /opt/jupyter/bin/python -m pip check
 COPY custom_nodes/ /opt/comfyui-seed/custom_nodes/
-COPY nodes.lock.json install_nodes.py start.sh launch.py download_models.py models.json install_workflows.py /opt/template/
+COPY nodes.lock.json install_nodes.py start.sh launch.py download_models.py models.json install_workflows.py apply_proxy_fix.py /opt/template/
 # Validate syntax and manifest semantics at build time without downloading weights.
-RUN python /opt/template/download_models.py --manifest /opt/template/models.json --validate-only
+RUN python /opt/template/apply_proxy_fix.py --comfyui /opt/comfyui-seed \
+    && python /opt/template/download_models.py --manifest /opt/template/models.json --validate-only
 COPY workflows/ /opt/template/workflows/
 WORKDIR /workspace
 EXPOSE 8188 8888

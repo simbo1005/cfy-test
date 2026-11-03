@@ -52,6 +52,9 @@ def prepare(cfg):
     head = subprocess.check_output(['git', '-C', str(comfy), 'rev-parse', 'HEAD'], text=True).strip()
     if head != expected:
         raise ValueError('ComfyUI code was updated separately from its image dependencies; use a matching image.')
+    # Persistent workspaces need the same compatibility fix as fresh image copies.
+    subprocess.run([cfg['python'], str(cfg['template'] / 'apply_proxy_fix.py'),
+                    '--comfyui', str(comfy)], check=True)
     for folder in ('diffusion_models', 'loras', 'vae', 'text_encoders'):
         (comfy / 'models' / folder).mkdir(parents=True, exist_ok=True)
     state(cfg, 'workflows', 'Installing bundled workflows without replacing existing files.')
